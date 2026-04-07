@@ -1,16 +1,77 @@
-# React + Vite
+# Veilux — Luxury E-Commerce Storefront
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Veilux is a high-end, minimalist e-commerce application designed with a focus on editorial aesthetics and premium user experience. Inspired by luxury fashion templates, it features smooth animations, user-specific data isolation, and a clean ivory-and-charcoal visual language.
 
-Currently, two official plugins are available:
+![Veilux Preview](https://github.com/VishalFulkar/Veilux/raw/main/src/assets/hero-preview.png) *(Note: Add your actual screenshot path here)*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- **Luxury Aesthetic**: Sophisticated Ivory (`#F6F4F2`) and Charcoal (`#2C2C2C`) palette with Maroon accents.
+- **Dynamic Navigation**: Category-based filtering (Men, Women, Accessories) with smooth-scroll integration.
+- **Firebase Authentication**: Secure user accounts with personalized profiles.
+- **Intelligent Cart Merging**: Items added as a guest are automatically merged into your account upon login.
+- **User Isolation**: Private cart and order history stored securely per user UID.
+- **Responsive Design**: Flawless experience across mobile, tablet, and desktop with a custom mobile drawer.
+- **Visual Star Ratings**: Real-time feedback using a custom star icon system for all products.
+- **Performance**: Built with Vite 6 and Tailwind CSS v4 for lightning-fast load times.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend**: [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Backend/Auth**: [Firebase](https://firebase.google.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **API**: [FakeStoreAPI](https://fakestoreapi.com/) (Product Data)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/VishalFulkar/Veilux.git
+   cd Veilux
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**
+   Create a `.env` file in the root directory and add your Firebase configuration:
+   ```env
+   VITE_FIREBASE_API_KEY=your_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+## 📂 Project Structure
+
+- `src/components`: Reusable UI components (Navbar, ProductGrid, etc.)
+- `src/pages`: Main application views (Homepage, Login, Cart, etc.)
+- `src/redux`: Redux slices and store configuration
+- `src/config`: Firebase and API setup
+- `src/index.css`: Global styles using Tailwind v4 @theme
+
+## 📜 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+Designed with ❤️ by [Vishal Fulkar](https://github.com/VishalFulkar)
