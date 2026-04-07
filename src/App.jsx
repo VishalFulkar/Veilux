@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -13,6 +13,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import OrderHistory from './pages/OrderHistory'
 import ProductDetail from './pages/ProductDetail'
+import Loader from './components/Loader'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const App = () => {
   const cart = useSelector(state => state.cart);
   const orders = useSelector(state => state.orders);
   
+  const [showSplash, setShowSplash] = useState(true);
   const prevUserUid = useRef(undefined);
   const isHydrating = useRef(false);
 
@@ -39,7 +41,7 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  // 2. Data Hydration & Merging (Triggered when Auth state is ready or user changes)
+  // 2. Data Hydration & Merging ... 
   useEffect(() => {
     if (!isAuthReady) return;
 
@@ -49,7 +51,6 @@ const App = () => {
     if (currentUserUid && prevUserUid.current !== currentUserUid) {
       isHydrating.current = true;
       
-      // Get Guest Cart & Specific User Cart
       const guestCartRaw = localStorage.getItem('cart_guest');
       const userCartRaw = localStorage.getItem(`cart_${currentUserUid}`);
       const userOrdersRaw = localStorage.getItem(`orders_${currentUserUid}`);
@@ -58,7 +59,6 @@ const App = () => {
       const userItems = userCartRaw ? JSON.parse(userCartRaw) : [];
       const userOrders = userOrdersRaw ? JSON.parse(userOrdersRaw) : [];
 
-      // MERGE LOGIC: Add guest items into user items
       let mergedItems = [...userItems];
       guestItems.forEach(gItem => {
         const existing = mergedItems.find(uItem => uItem.id === gItem.id);
@@ -69,17 +69,12 @@ const App = () => {
         }
       });
 
-      // Update Redux
       dispatch(setCart(mergedItems));
       dispatch(setOrders(userOrders));
-      
-      // Clear Guest Cart after merge
       localStorage.removeItem('cart_guest');
-      
       isHydrating.current = false;
     } 
     
-    // Detect Logout event (Transition from User to Guest)
     else if (!currentUserUid && prevUserUid.current) {
       isHydrating.current = true;
       dispatch(setCart([]));
@@ -87,7 +82,6 @@ const App = () => {
       isHydrating.current = false;
     }
     
-    // Detect Initial Guest Mount
     else if (!currentUserUid && prevUserUid.current === undefined) {
       isHydrating.current = true;
       const guestCartRaw = localStorage.getItem('cart_guest');
@@ -99,7 +93,7 @@ const App = () => {
     prevUserUid.current = currentUserUid;
   }, [isAuthReady, user?.uid, dispatch]);
 
-  // 3. Auto-Save Listener (Saves whenever state changes, IF not currently hydrating)
+  // 3. Auto-Save Listener
   useEffect(() => {
     if (!isAuthReady || isHydrating.current) return;
 
@@ -111,23 +105,26 @@ const App = () => {
     }
   }, [cart.items, orders.orderHistory, user, isAuthReady]);
 
-  if (!isAuthReady) {
-    return <div className="min-h-screen bg-ivory flex items-center justify-center font-serif text-charcoal italic tracking-widest text-2xl">Veilux</div>;
-  }
-
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-ivory text-charcoal transition-colors duration-500">
-      <Navbar />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/orders" element={<OrderHistory />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-        </Routes>
-      </main>
+    <div className="relative min-h-screen font-sans bg-ivory text-charcoal">
+      
+      {/* 🎬 Cinematic Loader Component (Mimics GSAP sequence without library) */}
+      {showSplash && <Loader onComplete={() => setShowSplash(false)} />}
+
+      {/* 🏠 Main Store Content */}
+      <div className={`min-h-screen flex flex-col transition-opacity duration-700 ${showSplash ? 'opacity-0' : 'opacity-100'}`}>
+        <Navbar />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/orders" element={<OrderHistory />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   )
 }
