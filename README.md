@@ -2,7 +2,7 @@
 
 Veilux is a high-end, minimalist e-commerce application designed with a focus on editorial aesthetics and premium user experience. Inspired by luxury fashion templates, it features smooth animations, user-specific data isolation, and a clean ivory-and-charcoal visual language.
 
-![Veilux Preview](https://github.com/VishalFulkar/Veilux/raw/main/src/assets/hero-preview.png) *(Note: Add your actual screenshot path here)*
+![Veilux Preview](https://github.com/VishalFulkar/Veilux/raw/main/src/assets/hero-preview.png) 
 
 ## ✨ Features
 
