@@ -20,8 +20,14 @@ const ProductDetail = () => {
     if (!product) {
       const fetchSingleProduct = async () => {
         try {
-          const res = await axios.get(`/api/products/${id}`);
-          setProduct(res.data);
+          const res = await axios.get(`https://69d7f6619c5ebb0918c8a3d0.mockapi.io/products`);
+          const allProducts = res.data;
+          const p = allProducts.find(item => item.id === parseInt(id));
+          if (p) {
+            setProduct(p);
+          } else {
+            setError('Product not found.');
+          }
         } catch (err) {
           setError('Failed to load product details.');
         } finally {
