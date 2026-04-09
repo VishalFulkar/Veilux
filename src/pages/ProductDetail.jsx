@@ -20,7 +20,7 @@ const ProductDetail = () => {
     if (!product) {
       const fetchSingleProduct = async () => {
         try {
-          const res = await axios.get(`https://fakestoreapi.com/products/${id}`);
+          const res = await axios.get(`/api/products/${id}`);
           setProduct(res.data);
         } catch (err) {
           setError('Failed to load product details.');
