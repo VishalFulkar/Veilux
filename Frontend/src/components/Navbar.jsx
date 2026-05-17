@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { ShoppingBag, Search, User, Menu, LogOut, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { auth } from '../config/firebase';
-import { signOut } from 'firebase/auth';
+import axios from 'axios';
+import { setAuthUser } from '../redux/features/authSlice';
 import { setCategory, setSearchQuery } from '../redux/features/filterSlice';
 
 const Navbar = () => {
@@ -16,9 +16,17 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await signOut(auth);
+      // Clear localStorage session
+      localStorage.removeItem('veilux_user');
+      
+      // Clear Axios authorization header
+      delete axios.defaults.headers.common['Authorization'];
+      
+      // Dispatch logout state to Redux
+      dispatch(setAuthUser(null));
+      
       navigate('/');
       setIsMobileMenuOpen(false);
     } catch (error) {

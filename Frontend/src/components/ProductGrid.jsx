@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import { fetchProducts } from '../api/fakeStoreAPI'
+import { fetchProducts } from '../api/productsAPI'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductStart, getProductsFalied, getProductsSuccess } from '../redux/features/productSlice';
 import ResultCard from './ResultCard';

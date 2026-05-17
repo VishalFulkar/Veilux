@@ -1,11 +1,35 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { setOrders } from '../redux/features/orderSlice';
 
 const OrderHistory = () => {
   const { orderHistory: orders = [] } = useSelector(state => state.orders);
   const { isAuthenticated, user } = useSelector(state => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get('http://localhost:5000/api/orders');
+        dispatch(setOrders(res.data));
+      } catch (err) {
+        console.error("Failed to fetch order history:", err);
+        setError("Could not load your orders. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchOrders();
+  }, [isAuthenticated, dispatch]);
 
   if (!isAuthenticated) {
     return (
@@ -19,7 +43,23 @@ const OrderHistory = () => {
     );
   }
 
-  const userOrders = orders.filter(order => order.userEmail === user?.email);
+  if (loading) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-4 bg-ivory">
+        <h2 className="text-2xl font-serif italic text-charcoal mb-4">Loading your orders...</h2>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-4 bg-ivory text-red-500">
+        <h2 className="text-2xl font-serif italic mb-4">{error}</h2>
+      </div>
+    );
+  }
+
+  const userOrders = orders;
 
   if (userOrders.length === 0) {
     return (
@@ -40,13 +80,13 @@ const OrderHistory = () => {
         
         <div className="space-y-8">
           {userOrders.map((order) => (
-            <div key={order.id} className="bg-white border border-gray-100 p-8 shadow-sm">
+            <div key={order._id || order.id} className="bg-white border border-gray-100 p-8 shadow-sm">
               <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-6 mb-6">
                 <div>
                   <p className="text-sm tracking-widest uppercase text-gray-500 mb-1">
                     Order ID
                   </p>
-                  <p className="text-lg font-serif italic text-charcoal">{order.id}</p>
+                  <p className="text-lg font-serif italic text-charcoal">{order._id || order.id}</p>
                 </div>
                 <div className="mt-4 md:mt-0">
                   <p className="text-sm tracking-widest uppercase text-gray-500 mb-1">

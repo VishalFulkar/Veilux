@@ -20,9 +20,8 @@ const ProductDetail = () => {
     if (!product) {
       const fetchSingleProduct = async () => {
         try {
-          const res = await axios.get(`https://69d7f6619c5ebb0918c8a3d0.mockapi.io/products`);
-          const allProducts = res.data;
-          const p = allProducts.find(item => item.id === parseInt(id));
+          const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+          const p = res.data;
           if (p) {
             setProduct(p);
           } else {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from './config/firebase'
+import axios from 'axios'
 import { setAuthUser } from './redux/features/authSlice'
 import { setCart } from './redux/features/cartSlice'
 import { setOrders } from './redux/features/orderSlice'
@@ -25,20 +24,25 @@ const App = () => {
   const prevUserUid = useRef(undefined);
   const isHydrating = useRef(false);
 
-  // 1. Auth Listener
+  // 1. JWT Session Hydrator
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        dispatch(setAuthUser({ 
-          uid: firebaseUser.uid, 
-          email: firebaseUser.email, 
-          name: firebaseUser.displayName || firebaseUser.email.split('@')[0] 
-        }));
-      } else {
+    const savedUser = localStorage.getItem('veilux_user');
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        dispatch(setAuthUser(parsedUser));
+        
+        // Configure Axios default header
+        if (parsedUser.token) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
+        }
+      } catch (e) {
+        console.error("Session hydration error", e);
         dispatch(setAuthUser(null));
       }
-    });
-    return () => unsubscribe();
+    } else {
+      dispatch(setAuthUser(null));
+    }
   }, [dispatch]);
 
   // 2. Data Hydration & Merging ... 
