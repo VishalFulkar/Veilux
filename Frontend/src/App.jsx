@@ -14,6 +14,9 @@ import OrderHistory from './pages/OrderHistory'
 import ProductDetail from './pages/ProductDetail'
 import Loader from './components/Loader'
 
+// Configure global Axios API endpoint routing for Vercel/Render connection
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const App = () => {
   const dispatch = useDispatch();
   const { isAuthReady, user } = useSelector(state => state.auth);

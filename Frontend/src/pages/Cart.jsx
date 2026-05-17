@@ -24,7 +24,7 @@ const Cart = () => {
     
     try {
       // POST the completed order securely to Express/MongoDB backend
-      const res = await axios.post('http://localhost:5000/api/orders', {
+      const res = await axios.post('/api/orders', {
         items,
         total: Number(total.toFixed(2))
       });

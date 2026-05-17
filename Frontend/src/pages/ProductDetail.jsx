@@ -20,7 +20,7 @@ const ProductDetail = () => {
     if (!product) {
       const fetchSingleProduct = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+          const res = await axios.get(`/api/products/${id}`);
           const p = res.data;
           if (p) {
             setProduct(p);
