@@ -2,7 +2,7 @@
 
 Veilux is a high-end, minimalist e-commerce storefront designed with a focus on editorial aesthetics, premium user experience, and a robust full-stack architecture. Inspired by high-fashion boutique layouts, it features an elegant Ivory (`#F6F4F2`) and Charcoal (`#2C2C2C`) visual theme, fluid transitions, and a custom MERN architecture powered by Node.js, Express, MongoDB, and React.
 
-![Veilux Preview](https://github.com/VishalFulkar/Veilux/frontend/raw/main/src/assets/hero-preview.png)
+![Veilux Preview](Frontend/src/assets/hero-preview.png)
 
 ---
 
